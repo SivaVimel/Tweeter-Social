@@ -34,7 +34,7 @@ Here are some screenshots showcasing the inner pages of the @Tweeter app:
 
 Check out this demo video showcasing the @Tweeter app:
 
-[![Tweeter Demo Video](https://img.youtube.com/vi/jgpTGbBNWtw/0.jpg)](https://www.youtube.com/watch?v=jgpTGbBNWtw)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jgpTGbBNWtw" frameborder="0" allowfullscreen></iframe>
 
 ## Getting Started:
 
