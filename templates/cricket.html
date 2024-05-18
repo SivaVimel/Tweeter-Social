@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body{
+            color:white;
+            margin: 0;
+            padding: 0;
+            background-color: #5f9f0c; /* Green color for the grass */
+            background-image: 
+                linear-gradient(90deg, transparent 48%, rgba(255, 255, 255, 0.5) 48%),
+                linear-gradient(rgba(255, 255, 255, 0.5) 48%, transparent 48%);
+            background-size: 20px 20px; /* Size of the grid lines */
+        }
+        #score{
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .player{
+            width: 35%;
+            border: 1;
+            margin-right:5px;
+            margin-bottom:5px;
+        }
+        img{
+           /* padding-left: 120px; */
+            padding-top: 50px;
+         
+        }
+        button{
+            background-color: aqua;
+            font-size: 28px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        h1{
+            font-family: 'Courier New', Courier, monospace;  
+        }
+        .cntSpc{
+            background-color:rgba(44, 44, 44, 0.537);
+            
+        }
+        .cntSpc1{
+            display:flex;
+            justify-content:center;
+            
+        }
+        .cntSpc2{
+            display:flex;
+            justify-content:center;
+            flex-direction: column;
+        }
+
+        .comp{
+                width: 35%;
+                border: 1;
+        }
+        .pitch-ground {
+            display:flex;
+            justify-content:space-between;
+            background-image: url("/static/pitch.jpg");
+            background-size: 50%;
+            background-color: rgb(58,196,87);
+            bottom:0px;
+            width: 100%; /* Adjust width as needed */
+            position:absolute;
+        }
+        .main-head {
+            color: aqua; /* Inner color */
+            text-shadow: 
+                -1px -1px 0 black,  
+                1px -1px 0 black,
+                -1px 1px 0 black,
+                1px 1px 0 black; /* Outer color */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(27, 27, 27, 0.7);
+            width: 80%;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2; /* Ensure the popup is above the circle */
+        }
+        
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.586);
+        }
+        
+        .popup-content {
+            font-size: 20px;
+            color: yellow;
+        }
+        #leaderboardContainer1 {
+            background-color:rgba(255, 255, 0, 0.533);
+            color: #333333;
+            display: inline-block;
+            text-align: left;
+            width: 50%;
+            height:50%;
+            font-size:70%;
+            margin-top:5px; /* Adjust the width as needed */
+            border: 3px solid black; /* Optional: Add border for better visualization */
+            border-radius:5px;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <div id='loadField' style='display: none; text-align:center;'>
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
+        <lord-icon
+            src="https://cdn.lordicon.com/xmuplryc.json"
+            trigger="loop"
+            state="loop-wifi"
+            colors="primary:aqua"
+            style="width:25px;height:25px">
+        </lord-icon>
+    </div>
+    <script>
+        function displayLoad() {
+            var text = document.getElementById('loadField')
+            text.style.display = 'block';
+        }
+        </script>
+    <div style='display:flex; justify-content:space-between;'>
+        <a onclick='displayLoad()' href='\game'><button style='background-color:yellow; border-color: black; border-radius: 5px; font-size:100%; text-align:center; margin-right:5px;margin-top:5px;'><h1 style='font-size:100%;display:inline;'>Exit</h1></button></a>
+        <button style='background-color:yellow; border-color: black; border-radius: 5px; font-size:100%; text-align:center; margin-right:5px;margin-top:5px;' class="trophy-btn" onclick="showPopup()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="black" class="bi bi-trophy-fill" viewBox="0 0 16 16">
+              <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935"/>
+            </svg>
+          </button>
+    </div>
+    <div id="leaderboardPopup" class="popup">
+        <div class="popup-content">
+            <!-- Close button for the popup -->
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Leaderboard</h2>
+            <!-- Placeholder for the leaderboard content -->
+            <div id="leaderboardContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Function to fetch the top 10 scorers
+        // Function to fetch the top 10 scorers
+async function fetchTopScorers() {
+    try {
+        const response = await fetch('https://_YOUR_.firebasedatabase.app/_NAME_.json');
+        const data = await response.json();
+        console.log('Data from Firebase:', data); // Add this line for debugging
+
+        // Array to store scores for all gamertags
+        const crickets = [];
+
+        // Iterate over each gamertag
+        for (const gamertag in data) {
+            const gamertagData = data[gamertag];
+            // Check if the gamertag has a score property
+            if (gamertagData.cricket) {
+                // Round the score to 4 decimal places
+                const roundedScore = parseFloat(gamertagData.cricket);
+                // Push gamertag and rounded score to the drives array
+                crickets.push({ gamertag, cricket: roundedScore });
+            }
+        }
+
+        // Sort scores in descending order
+        crickets.sort((a, b) => b.cricket - a.cricket);
+        console.log('Top 10 ostriches:', crickets); // Add this line for debugging
+
+        // Display top 10 scorers
+        const leaderboardContent = document.getElementById('leaderboardContent');
+        leaderboardContent.innerHTML = '<ol>';
+        for (let i = 0; i < Math.min(crickets.length, 10); i++) {
+            const place = i + 1;
+            let svg = '';
+            if (place === 1) {
+                svg = '<svg style="color: rgb(0, 255, 225);" xmlns="http://www.w3.org/2000/svg"  width="20px" height="20px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="#00ffe1"></path></svg>';
+            } else if (place === 2) {
+                svg = '<svg style="color: red;" xmlns="http://www.w3.org/2000/svg"  width="20px" height="20px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="red"></path></svg>';
+            } else if (place === 3) {
+                svg = '<svg style="color: white;" xmlns="http://www.w3.org/2000/svg"  width="20px" height="20px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="white"></path></svg>';
+            }
+            leaderboardContent.innerHTML += `<li>${svg} ${crickets[i].gamertag}: ${crickets[i].cricket}</li>`;
+        }
+        leaderboardContent.innerHTML += '</ol>';
+
+    } catch (error) {
+        console.error('Error fetching top scorers:', error);
+    }
+}
+
+// Function to show the popup
+function showPopup() {
+    var popup = document.getElementById("leaderboardPopup");
+    popup.style.display = "block";
+
+    // Fetch top scorers when showing the popup
+    fetchTopScorers();
+}
+
+// Function to close the popup
+function closePopup() {
+    var popup = document.getElementById("leaderboardPopup");
+    popup.style.display = "none";
+}
+      </script>
+    <center>
+        <h1 class='main-head'>Welcome {{ request.args.get('gametag') }}</h1>
+    </center>
+
+    <div class='pitch-ground'>
+        <div class="comp">
+            <center>
+                <button style='border-color: black; border-radius: 5px; font-size:80%; text-align:center; margin-left:5px;margin-top:5px;'><h1 style='font-size:100%;display:inline;' id="compScore">Ostrich Runs: </h1></button>
+                <div id="batball1"><img src="static/ball.png" alt="player image " height="100%" width="100%"></div>
+            </center>
+        </div>
+        <div id='restart' onclick="refreshPage()"></div>
+        <script>
+            function refreshPage() {
+                window.location.reload();
+            }
+        </script>
+        <div class="player">
+                <button style='border-color: black; border-radius: 5px; font-size:80%; text-align:center; margin-right:5px;margin-top:5px;'><h1 style='font-size:100%;display:inline;' id="score">Your Runs: </h1></button>
+                <div id="batball"><img src="static/bat.png" alt="player image " height="100%" width="100%"></div> <br> <br>
+                <button onclick="addToScore(1)" id="btn1">1</button>
+                <button onclick="addToScore(2)" id="btn2">2</button>
+                <button onclick="addToScore(3)" id="btn3">3</button> <br> <br>
+                <button onclick="addToScore(4)" id="btn4">4</button>
+                <button onclick="addToScore(5)" id="btn5">5</button>
+                <button onclick="addToScore(6)" id="btn6">6</button>
+        </div>
+    </div>
+
+
+    <div class="cntSpc">
+        <div class='cntSpc1'>
+            <button style='border-color: black; border-radius: 5px; font-size:50%; text-align:center; margin-right:5px;margin-top:5px;'><h1 id="compChoice"> Ostrich Choose: </h1></button>
+            <button style='border-color: black; border-radius: 5px; font-size:50%; text-align:center;margin-top:5px;'><h1 id="userChoice">You Choose: </h1></button>
+        </div>
+        <div class='cntSpc2'>
+            <button style='background-color:transparent; color:aqua; font-size:50%; border:none; text-align:center;'><h1 id="status"></h1></button>
+            <button style='background-color:transparent; color:aqua; font-size:50%; border:none; text-align:center;'><h1 id="status2"></h1></button>
+            <button style='background-color:transparent; color:aqua; font-size:50%; border:none; text-align:center;'><h1 id="status3"></h1></button>
+        </div>
+    </div>
+
+    <script>
+        async function fetchTop5Scorers() {
+            try {
+                const response = await fetch('https://_YOUR_.firebasedatabase.app/_NAME_.json');
+                const data = await response.json();
+                console.log('Data from Firebase:', data);
+        
+                const crickets = [];
+        
+                for (const gamertag in data) {
+                    const gamertagData = data[gamertag];
+                    if (gamertagData.cricket) {
+                        const roundedScore = parseFloat(gamertagData.cricket);
+                        crickets.push({ gamertag, cricket: roundedScore });
+                    }
+                }
+        
+                crickets.sort((a, b) => b.cricket - a.cricket);
+        
+                const leaderboardContent1 = document.getElementById('leaderboardContent1');
+                leaderboardContent1.innerHTML = '<ol style="list-style-type: none; padding-left: 0;">';
+                for (let i = 0; i < Math.min(crickets.length, 5); i++) {
+                    let svg;
+                    if (i === 0) {
+                        svg = '<svg style="color: rgb(0, 255, 225);" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="#00ffe1"></path></svg>';
+                    } else if (i === 1) {
+                        svg = '<svg style="color: red" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 576 512"><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="red"></path></svg>';
+                    } else if (i === 2) {
+                        svg = '<svg style="color: white" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 576 512"><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="white"></path></svg>';
+                    } else {
+                        svg = '';
+                    }
+                    leaderboardContent1.innerHTML += `<li>${svg} ${crickets[i].gamertag}: ${crickets[i].cricket}</li>`;
+                }
+                leaderboardContent1.innerHTML += '</ol>';
+        
+            } catch (error) {
+                console.error('Error fetching top scorers:', error);
+            }
+        }
+        
+        // Call the function to fetch top 5 scorers when the page loads
+        window.onload = fetchTop5Scorers;
+    </script>
+    <div style='text-align:center;'>
+        <div id="leaderboardContainer1">
+            <h2 style='text-align:center;'>Top 5 Players</h2>
+            <div style='margin-left:10px;' id="leaderboardContent1"></div>
+        </div>
+    </div>
+
+    <script>
+        async function saveScore(score) {
+            try {
+                const gametag = new URLSearchParams(window.location.search).get('gametag') + "->CRICKET";
+                const response = await fetch(`https://_YOUR_.firebasedatabase.app/_NAME_.json/${gametag}.json`);
+                const data = await response.json();
+          
+                if (!data || !data.cricket || score > parseInt(data.cricket)) { // Changed drive to score here
+                    // If the gamertag doesn't exist or the new score is higher
+                    const postData = { cricket: score }; // Changed drive to score here
+                    const postResponse = await fetch(`https://_YOUR_.firebasedatabase.app/_NAME_.json/${gametag}.json`, {
+                        method: 'PUT',
+                        body: JSON.stringify(postData),
+                        headers: { 'Content-Type': 'application/json' },
+                    });
+          
+                    if (!postResponse.ok) {
+                        throw new Error(`Error saving score: ${postResponse.statusText}`);
+                    }
+                }
+            } catch (error) {
+                console.error("Error saving score:", error);
+            }
+          }
+          
+        var scr = 0;
+var compScr = 0;
+var userBatting = true;
+var userChoice = 0;
+var compBatting = false;
+var sts = document.getElementById("status");
+var sts2 = document.getElementById("status2");
+var sts3 = document.getElementById("status3");
+
+function addToScore(val) {
+    userChoice = val;
+    compChoice = Math.floor(Math.random() * 6) + 1;
+    if (userBatting == true) {
+        scr += val;
+        sts.innerHTML = "You are Batting!";
+        document.getElementById("score").innerHTML = scr;
+        const batting = document.getElementById("batball");
+        batting.innerHTML = `<img src="static/playerbat.png" alt="player image " height="100%" width="100%">`;
+        document.getElementById("userChoice").innerHTML = "You Choose: " + userChoice;
+        document.getElementById("score").innerHTML = "Your Runs: " + scr;
+
+
+        document.getElementById("compChoice").innerHTML = "Ostrich Choose: " + compChoice;
+        const batting1 = document.getElementById("batball1");
+        batting1.innerHTML = `<img src="static/compball.png" alt="player image " height="100%" width="100%">`;
+
+        if (userChoice == compChoice) {
+            playerOut()
+
+
+        }
+    }
+    if (userBatting == false && compBatting == true) {
+        compScr += compChoice;
+        sts.innerHTML = "Ostrich Batting!";
+        const batting = document.getElementById("batball");
+        batting.innerHTML = `<img src="static/playerball.png" alt="player image " height="100%" width="100%">`;
+        const batting1 = document.getElementById("batball1");
+        batting1.innerHTML = `<img src="static/combat.png" alt="player image " height="100%" width="100%">`;
+        document.getElementById("compScore").innerHTML = "Ostrich Runs: " + compScr;
+        document.getElementById("compChoice").innerHTML = "Ostrich Choose: " + compChoice;
+        document.getElementById("userChoice").innerHTML = "You Choose: " + userChoice;
+        document.getElementById("score").innerHTML = "Your Runs: " + scr;
+        
+        if (compScr > scr || compChoice == userChoice & userBatting == false) {
+            compOut()
+        }
+    }
+
+}
+
+
+function playerOut() {
+    sts.innerHTML = "Out!";
+    compBatting = true;
+    userBatting = false;
+    userChoice = 0;
+    compScr = 0;
+    const myTimeout = setTimeout(myMsg, 3000);
+
+    document.getElementById("userChoice").innerHTML = '';
+}
+
+function compOut() {
+    if (compScr > scr) {
+        compWin();
+    } else {
+        userWIn();
+    }
+}
+
+function userWIn() {
+    sts.innerHTML = '';
+    sts2.innerHTML = "You Won!";
+    const batting = document.getElementById("batball");
+    batting.innerHTML = `<img src="static/userwin.gif" alt="player image " height="100%" width="100%">`;
+    const batting1 = document.getElementById("batball1");
+    batting1.innerHTML = `<img src="static/lost.gif" alt="player image " height="100%" width="100%" style='margin-left:5px;'>`;
+    saveScore(scr);
+    document.getElementById("restart").innerHTML = "<button style='background-color:yellow; border-color: black; border-radius: 5px; font-size:100%; text-align:center; margin-right:5px;margin-top:5px;'>Play Again?</button>";
+    closeAll()
+}
+
+
+function compWin() {
+    sts.innerHTML = '';
+    sts3.innerHTML = "Ostrich Won!";
+    const batting = document.getElementById("batball");
+    batting.innerHTML = `<img src="static/userlost.gif" alt="player image " height="100%" width="100%">`;
+    const batting1 = document.getElementById("batball1");
+    batting1.innerHTML = `<img src="static/won.gif" alt="player image " height="100%" width="100%" style='margin-left:5px;'>`;
+    document.getElementById("restart").innerHTML = "<button style='background-color:yellow; border-color: black; border-radius: 5px; font-size:100%; text-align:center; margin-right:5px;margin-top:5px;'>Play Again?</button>";
+    closeAll()
+}
+// So that the buttons are Hidden after the game ends 
+ function closeAll() {
+    document.getElementById("btn1").style.visibility = "hidden";
+    document.getElementById("btn2").style.visibility = "hidden";
+    document.getElementById("btn3").style.visibility = "hidden";
+    document.getElementById("btn4").style.visibility = "hidden";
+    document.getElementById("btn5").style.visibility = "hidden";
+    document.getElementById("btn6").style.visibility = "hidden";
+ }
+    </script>
+
+</body>
+
+</html>

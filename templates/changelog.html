@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ChangeLog</title>
+    <style>
+        body {
+            background-color: #242424;
+            color: aqua;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            height: 100vh; /* Set height to 100% of viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Align items evenly along the cross-axis */
+            background: radial-gradient(
+                  circle farthest-side at 0% 50%,
+                  #282828 23.5%,
+                  rgba(255, 170, 0, 0) 0
+                )
+                21px 30px,
+              radial-gradient(
+                  circle farthest-side at 0% 50%,
+                  #2c3539 24%,
+                  rgba(240, 166, 17, 0) 0
+                )
+                19px 30px,
+              linear-gradient(
+                  #282828 14%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 85%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(
+                  150deg,
+                  #282828 24%,
+                  #2c3539 0,
+                  #2c3539 26%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 74%,
+                  #2c3539 0,
+                  #2c3539 76%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(
+                  30deg,
+                  #282828 24%,
+                  #2c3539 0,
+                  #2c3539 26%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 74%,
+                  #2c3539 0,
+                  #2c3539 76%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(90deg, #2c3539 2%, #282828 0, #282828 98%, #2c3539 0%) 0 0
+                #282828;
+            background-size: 40px 60px;
+        }
+
+        /* Your existing CSS styles */
+        .terminal_toolbar {
+            display: flex;
+            height: 30px;
+            align-items: center;
+            padding: 0 8px;
+            box-sizing: border-box;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            background: #212121;
+            justify-content: space-between;
+        }
+          
+          .butt {
+            display: flex;
+            align-items: center;
+          }
+          
+          .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin-right: 5px;
+            font-size: 8px;
+            height: 12px;
+            width: 12px;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 100%;
+            background: linear-gradient(#7d7871 0%, #595953 100%);
+            text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 1px 0px #41403A, 0px 1px 1px 0px #474642;
+          }
+          
+          .btn-color {
+            background: #ee411a;
+          }
+          
+          .btn:hover {
+            cursor: pointer;
+          }
+          
+          .btn:focus {
+            outline: none;
+          }
+          
+          .butt--exit {
+            background: linear-gradient(#f37458 0%, #de4c12 100%);
+          }
+          
+          .add_tab {
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 0 6px;
+            border-radius: 4px 4px 0 0;
+            border-bottom: none;
+            cursor: pointer;
+          }
+          
+          .user {
+            color: #d5d0ce;
+            margin-left: 6px;
+            font-size: 14px;
+            line-height: 15px;
+          }
+          
+          .terminal_body {
+            background: rgba(0, 0, 0, 0.6);
+            height: calc(100% - 30px);
+            padding-top: 2px;
+            margin-top: -1px;
+            font-size: 12px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+          }
+          
+          .terminal_promt {
+            display: flex;
+            margin-bottom: 10px;
+          }
+          
+          .terminal_promt span {
+            margin-left: 4px;
+          }
+          
+          .terminal_user {
+            color: #1eff8e;
+          }
+          
+          .terminal_location {
+            color: #4878c0;
+          }
+          
+          .terminal_bling {
+            color: #dddddd;
+          }
+          
+          .terminal_cursor {
+            display: block;
+            height: 14px;
+            width: 5px;
+            margin-left: 10px;
+            animation: curbl 1200ms linear infinite;
+          }
+          
+          
+          @keyframes curbl {
+          
+            0% {
+              background: #ffffff;
+            }
+          
+            49% {
+              background: #ffffff;
+            }
+          
+            60% {
+              background: transparent;
+            }
+          
+            99% {
+              background: transparent;
+            }
+          
+            100% {
+              background: #ffffff;
+            }
+          }
+    </style>
+</head>
+<body>
+    <div class="container">   
+      <div id='loadField' style='display: none; text-align:center;'>
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
+        <lord-icon
+            src="https://cdn.lordicon.com/xmuplryc.json"
+            trigger="loop"
+            state="loop-wifi"
+            colors="primary:aqua"
+            style="width:25px;height:25px">
+        </lord-icon>
+    </div>
+    <script>
+        function displayLoad() {
+            var text = document.getElementById('loadField')
+            text.style.display = 'block';
+        }
+        </script>    
+            <div class="terminal_toolbar">
+                <div class="butt">
+                    <a onclick='displayLoad()' href="/"><button class="btn btn-color"></button></a>
+                    <a onclick='displayLoad()' href="/"><button class="btn"></button></a>
+                    <a onclick='displayLoad()' href="/"><button class="btn"></button></a>
+                </div>
+                <p class="user">tweeter@admin: ~</p>
+                <div class="add_tab">
+                    <a onclick='displayLoad()' style="text-decoration: none; color: white;" href="https://www.buymeacoffee.com/scriptiez">+</a>
+                </div>
+            </div>
+            <div class="terminal_body">
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ Hello There! <br> Welcome to the Chaage-Logs [Updation News]</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ [#HOME] To go back to home <a style="text-decoration: none; color: aqua;" href="/">click_Me</a> or control buttons</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ [#SUPPORT] For making <a style="text-decoration: none; color: #FF3131;" href="https://www.buymeacoffee.com/scriptiez">donation</a> or have any suggestion <a style="text-decoration: none; color: aqua;" href="https://www.buymeacoffee.com/scriptiez">clickMe</a> or the add btn</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ [ABOUT] Users can engage in anonymous conversations and share messages freely without any constraints. Whether you want to discuss the latest trends or share your thoughts anonymously, our chatroom provides a safe and welcoming environment for everyone.</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ [SAFETY] We prioritize your privacy and security! That's why we've implemented a strict no-data-storage policy. Your personal information and messages are never stored in any cloud, providing you with peace of mind and complete anonymity. Remember, messages can disappear at any moment, ensuring your conversations remain private and secure.</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ [#REFRESH]  Simply click on the <a style="text-decoration: none; color: aqua;" href="/">"@Tweeter-Logo"</a> heading in the chat page, and voila! Your chat will refresh automatically, ensuring you never miss out on any new messages or updates from other users.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [NICKNAME] Users can now customize their display names using the /YourName command. For example, /Spiderman will set your name to "Spiderman". Please note that you have to manually enter your desired name each time you send a message, as user data is not stored to prioritize privacy and security. To maintain anonymity and prevent impersonation, usernames containing "anoni" and "@admin", as well as any usernames containing "@", will automatically be replaced with "Anonymous".</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [HELPLOG] Have a question or need assistance? Click the Help-Log button to access tips. Whether you're new to the app or looking for advanced features, our Help-Log is your go-to resource for quick answers and troubleshooting tips.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [DONATION] Updated the donation page [<a style="text-decoration: none; color: aqua;" href="/donation">PurchasePage</a>] to include options for users to donate money, purchase or update clan credentials, and submit queries related to clan management. Enhanced security measures for clan credentials with streamlined processes for updating or changing passwords, including a verification system for password changes. Bug fixes addressing clan registration and access issues, minor UI inconsistencies, and performance optimizations for improved platform efficiency. General enhancements include new features to enhance user engagement, backend infrastructure improvements for scalability and reliability, and codebase optimizations for faster loading times and smoother navigation.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [CLANSYSTEM] A new clan logic page has been incorporated to enrich community functionalities. Users are now empowered with the capability to acquire a clan, enabling them to establish and personalize their private communities within the platform. To facilitate clan acquisition, users can conveniently access the designated <a href='/donation' style='color:aqua'>PurchasePage</a> for streamlined transactions.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [CLANSYSTEMv1UPDATE] A new clan logic page has been incorporated to enrich community functionalities. Users are now empowered with the capability to acquire a clan, enabling them to establish and personalize their private or public communities within the platform. Private clans offer permanent existence with customizable build opportunities, while public clans are temporary and will be automatically deleted when the sever is restarted. To facilitate clan acquisition, users can conveniently access the designated <a href='/donation' style='color:aqua'>PurchasePage</a> for streamlined transactions.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [MEDIA] A new <a href='/donation' style='color:aqua'>Image Viewer System</a> allowing users to explore images across diverse categories such as MEME, Funny, History, Quotes, Space, CATS, Dogs, and Random. This addition enriches user engagement by providing entertaining and informative content. If an image is not displayed, users will encounter an alternate image featuring an ostrich, prompting them to click next for the next available image.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [PRIVATEv1CHATSYSTEM] A new feature has been added to the clan system! Users can now create private chat groups, complete with group names and passwords. Others can join these groups using the password to engage in private conversations. Additionally, users in the group will receive notifications when a new member joins the chat, accompanied by a system message: "System [UserName] has joined the conversation.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [MEDIASHARESYSTEM] The latest system update brings two exciting new features to the platform. Firstly, users can now effortlessly share images in the chat using the "/p" command. By simply inputting "/p img_url", the image from the provided URL will be instantly displayed in the chatbox, enhancing visual communication. Additionally, the introduction of the "/v" command enables users to seamlessly post YouTube videos directly into the chat. Utilizing "/v youtube_url", users can embed videos, facilitating collaborative viewing experiences within the community.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [Game Arena] Enhanced the user experience with the introduction of a dynamic <a href='/game' style='color:aqua'>Game Arena</a>, offering a diverse selection of engaging titles such as Snake, Digi Cricket, Flappy Ostrich, and Drive. Compete against others in thrilling gameplay sessions, all while striving to climb the leaderboard and attain top scores.</span>
+                </div>
+                <div class="terminal_promt">
+                  <span class="terminal_user">Scriptiez@admin:</span>
+                  <span class="terminal_location">~</span>
+                  <span class="terminal_bling">$ [Notify] Enhanced user engagement with the addition of two new magical buttons, Notify and Receive, transforming the digital conversation experience. The "Notify" button emits a friendly sound, signaling others' presence or inviting them to join the chat, while the "Receive" button opens a duplicate portal, enabling users to stay connected even while exploring other digital realms. Together, these buttons provide seamless communication, ensuring users never miss a beat.</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ “Freedom of speech is a human right and the foundation upon which democracy is built. Any restriction of freedom of speech is a restriction upon democracy.</span>
+                </div>
+                <div class="terminal_promt">
+                    <span class="terminal_user">Scriptiez@admin:</span>
+                    <span class="terminal_location">~</span>
+                    <span class="terminal_bling">$ Founder: Siva Vimel Rajhen</span>
+                    <span class="terminal_cursor"></span>
+                </div>
+            </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tweeter</title>
+    <style>
+        body {
+            background-color: #242424;
+            color: #80FCFC;
+            margin: 0; /* Remove default body margin */
+            padding: 0; /* Remove default body padding */
+        }
+        .container {
+            width: 100%;
+            height: 100vh; /* Set height to 100% of viewport height */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            justify-content: space-between; /* Align items evenly along the cross-axis */
+            background: radial-gradient(
+                  circle farthest-side at 0% 50%,
+                  #282828 23.5%,
+                  rgba(255, 170, 0, 0) 0
+                )
+                21px 30px,
+              radial-gradient(
+                  circle farthest-side at 0% 50%,
+                  #2c3539 24%,
+                  rgba(240, 166, 17, 0) 0
+                )
+                19px 30px,
+              linear-gradient(
+                  #282828 14%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 85%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(
+                  150deg,
+                  #282828 24%,
+                  #2c3539 0,
+                  #2c3539 26%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 74%,
+                  #2c3539 0,
+                  #2c3539 76%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(
+                  30deg,
+                  #282828 24%,
+                  #2c3539 0,
+                  #2c3539 26%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 74%,
+                  #2c3539 0,
+                  #2c3539 76%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(90deg, #2c3539 2%, #282828 0, #282828 98%, #2c3539 0%) 0 0
+                #282828;
+            background-size: 40px 60px;
+            padding-bottom: 50px; /* Space for the form */
+        }
+
+        #chat-box {
+            overflow-y: scroll;
+            padding: 10px;
+            flex-grow: 1; /* Take up remaining space */
+        }
+
+        form {
+            width: 90%;
+            margin: 0 auto; 
+            background-color: transparent;
+            margin-top: 0px; /* Add margin to separate from the header */
+        }
+
+        input[type="text"] {
+            width: 80%;
+            margin-top: 10px;
+        }
+        #chat-box::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        .Messenger {
+            
+        }
+        .navigation-card {
+            display: flex;
+            gap: 10%; /* Adjust the gap between elements */
+            border-radius: 50px;
+        }
+        
+        .tab {
+            margin-left: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }   
+        .tab1 {
+            margin-right: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }      
+        a {
+            text-decoration: none;
+        }
+        .button1 {
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+          }
+          
+          .button1 .svg-icon {
+            animation: spin 2s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+          
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        .header {
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            z-index: 2;
+        }
+
+        .modal {
+            z-index: 3;
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    
+        .modal-content {
+            background-color: black;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+        }
+    
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    
+        .close:hover,
+        .close:focus {
+            color: #80FE0C;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .footer {
+            background-color: #242424;
+            color: white;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .image-container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); /* Semi-transparent black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1; /* Ensure overlay is above the image */
+        }
+        
+        .overlay-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .view-btn {
+            background-color: #28282853; /* Green */
+            border-style: dashed;
+            border-color: rgba(0, 255, 255, 0.275);
+            color: aqua;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id='loadField' style='display: none; text-align:center;'>
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/xmuplryc.json"
+                trigger="loop"
+                state="loop-wifi"
+                colors="primary:aqua"
+                style="width:25px;height:25px">
+            </lord-icon>
+        </div>
+        <script>
+            function displayLoad() {
+                var text = document.getElementById('loadField')
+                text.style.display = 'block';
+            }
+            </script>
+        <div class="header">
+            <a href="#" class="tab1" onclick="showPopup()">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/nqtddedc.json"
+                    trigger="loop"
+                    colors="primary:aqua"
+                    style="width:25px;height:25px">
+                </lord-icon>
+            </a>
+            <script>
+                function showPopup() {
+                    // Get the modal
+                    var modal = document.getElementById("myModal");
+            
+                    // Display the modal
+                    modal.style.display = "block";
+            
+                    // When the user clicks on <span> (x), close the modal
+                    var span = document.getElementsByClassName("close")[0];
+                    span.onclick = function () {
+                        modal.style.display = "none";
+                    };
+            
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    };
+                }
+            </script>
+            
+            <!-- HTML for the pop-up modal -->
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Help-Log: <strong style='color:red; font-size:60%;'>No Rules | No Restrictions</strong></h3>
+                    <p>1. <strong style='color:#80FE0C;'>/YourName</strong> - A command to assign a username while messaging. For example - /Spiderman will set your name to "Spiderman". [Should Manually Assign Everytime]</p>
+                    <p>2. <strong style='color:#80FE0C;'>/p</strong> -  Use this command to share an image in the chat. For example, if you type "/p img_url", it will display the image from the provided URL in the chatbox.</p>
+                    <img style='width:100%;' src='static\p.gif'>
+                    <p>3. <strong style='color:#80FE0C;'>/v</strong> - Utilize this command to share YouTube videos in the chat. For instance, if you input "/v youtube_url", it will embed the video into the chat, allowing everyone to view and enjoy it.</p>
+                    <p>4. <strong style='color:#80FE0C;'>Header</strong>:</p>
+                    <img style='width:100%;' src='static\homepage.jpg'>
+                    <p><strong style='color:aqua;'>Clan</strong> - A clan represents a personalized group that encompasses permanent, private, and public clans. Permanent clans are acquired through customizable means by clan leaders to establish enduring groups. Conversely, private chats or clans are designated for confidential conversations among users with specific credentials, while temporary clans resemble permanent clans, albeit with a limited duration of existence.</p>
+                    <p><strong style='color:aqua;'>Home</strong> - This button would help you in refresh [access new messages] or to redirect on to the home page.</p>
+                    <p><strong style='color:aqua;'>Donate</strong> - This feature provides you with the opportunity to make a clan purchase or support the future development of the application.</p>
+                    <p><strong style='color:aqua;'>Changes</strong> - Stay updated with the latest updates or change-logs.</p>
+                    <p>5. <strong style='color:#80FE0C;'>Footer</strong>:</p>
+                    <img style='width:100%;' src='static\homepage1.jpg'>
+                    <p><strong style='color:aqua;'>Image</strong> - This page aims to cultivate a positive online environment by curating uplifting and entertaining content across various categories. By offering a selection of engaging and joyful media, including memes, humor, inspiring quotes, delightful animal photos, captivating space imagery, and entertaining anime memes, the platform endeavors to minimize exposure to negative or distressing content prevalent on other social platforms. Through thoughtful categorization and content curation, users can immerse themselves in a stream of positivity, fostering a healthier and happier online experience.</p>
+                    <p><strong style='color:aqua;'>Game</strong> - Enhanced the user experience with the introduction of a dynamic Game Arena, offering a diverse selection of engaging titles such as Snake, Digi Cricket, Flappy Ostrich, and Drive. Compete against others in thrilling gameplay sessions, all while striving to climb the leaderboard and attain top scores.</p>
+                    <p style='color:aqua;font-style: italic; text-align:center;'>Powered by Scriptiez</p>
+                </div>
+            </div>
+            <a href='/clan' onclick='displayLoad()' class="tab1">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/rpgflpkp.json"
+                    trigger="loop"
+                    colors="primary:aqua"
+                    style="width:25px;height:25px">
+                </lord-icon>
+            </a>
+            <a onclick='displayLoad()' href="/">
+                <img src="\static\l2.png" style="display: block; margin: 0 auto; width: 50px; height: auto; text-align: center;">
+            </a>
+            <a href='/donation' onclick='displayLoad()' class="tab">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/xoaqvsym.json"
+                    trigger="loop"
+                    colors="primary:aqua"
+                    style="width:25px;height:25px">
+                </lord-icon>
+            </a>
+            <a href="/changelog" onclick='displayLoad()' class="tab">
+                <button class="button1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" class="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="aqua"><circle r="2.5" cy="10" cx="10"></circle><path fill-rule="evenodd" d="m8.39079 2.80235c.53842-1.51424 2.67991-1.51424 3.21831-.00001.3392.95358 1.4284 1.40477 2.3425.97027 1.4514-.68995 2.9657.82427 2.2758 2.27575-.4345.91407.0166 2.00334.9702 2.34248 1.5143.53842 1.5143 2.67996 0 3.21836-.9536.3391-1.4047 1.4284-.9702 2.3425.6899 1.4514-.8244 2.9656-2.2758 2.2757-.9141-.4345-2.0033.0167-2.3425.9703-.5384 1.5142-2.67989 1.5142-3.21831 0-.33914-.9536-1.4284-1.4048-2.34247-.9703-1.45148.6899-2.96571-.8243-2.27575-2.2757.43449-.9141-.01669-2.0034-.97028-2.3425-1.51422-.5384-1.51422-2.67994.00001-3.21836.95358-.33914 1.40476-1.42841.97027-2.34248-.68996-1.45148.82427-2.9657 2.27575-2.27575.91407.4345 2.00333-.01669 2.34247-.97026z" clip-rule="evenodd"></path></g></svg>
+                </button>
+            </a>
+        </div>                     
+        <form class="Messenger" action="/send_message" method="post">
+            <input style="border-radius: 5px; background-color: #222222; color: aqua;" type="text" name="message" placeholder="What is up?">
+            <button style="border-radius: 5px; background-color: transparent; color: aqua;" type="submit">Send</button>
+        </form>
+        
+        <div id="chat-box">
+            {% for name, message, timestamp in messages[::-1] %}
+                {% if message.startswith('<img') %}
+                    <div class="image-container">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <button class="view-btn">Want to view image by {{name}}?</button>
+                            </div>
+                        </div>
+                        <p><strong style='color:#80FE0C;'>{{ name }}</strong><br>{{ message|safe }} <br> <small style='color: aqua'>{{ timestamp }}</small></p>
+                    </div>
+                {% elif message.startswith('<iframe') %}
+                    <!-- Display the embedded video -->
+                    <p><strong style='color:#80FE0C;'>{{ name }}</strong><br>{{ message|safe }} <br> <small style='color: aqua'>{{ timestamp }}</small></p>
+                {% else %}
+                    <!-- Display regular text message -->
+                    <p><strong style='color:#80FE0C;'>{{ name }}</strong> {{ message }} <br> <small style='color: aqua'>{{ timestamp }}</small></p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        <script>
+            // Get all image containers
+            const imageContainers = document.querySelectorAll('.image-container');
+        
+            // Add event listener to each image container
+            imageContainers.forEach(container => {
+                // Get overlay and view button
+                const overlay = container.querySelector('.image-overlay');
+                const viewBtn = overlay.querySelector('.view-btn');
+        
+                // Add click event listener to view button
+                viewBtn.addEventListener('click', () => {
+                    // Hide overlay
+                    overlay.style.display = 'none';
+                });
+            });
+        </script>
+        
+
+    </div>
+    <footer class="footer">
+        <a href='/image'>
+            <p onclick='displayLoad()' style='color:aqua;'>Image</p>
+        </a>
+        <a href='/game'>
+            <p onclick='displayLoad()' style='color:aqua;'>Game</p>
+        </a>
+    </footer>
+</body>
+</html>

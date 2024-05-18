@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FlappyBird</title>
+    <link rel="stylesheet" href="static/style.css" > 
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet">
+    <style>
+        .btn-align{
+            display:flex;
+            justify-content: space-between;
+            position: absolute;
+            top:0px;
+        }
+        .btn-align button{
+            color:yellow;
+            background-color:transparent;
+            border: none;
+            font-size:100%;
+        }
+    </style>
+</head>
+<body><div id='loadField' style='display: none; text-align:center; position:absolute; z-index: 9999; top:0px;'>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <lord-icon
+        src="https://cdn.lordicon.com/xmuplryc.json"
+        trigger="loop"
+        state="loop-wifi"
+        colors="primary:aqua"
+        style="width:25px;height:25px">
+    </lord-icon>
+</div>
+<script>
+    function displayLoad() {
+        var text = document.getElementById('loadField')
+        text.style.display = 'block';
+    }
+    </script>
+    <div class="btn-align">
+        <a onclick='displayLoad()' href='/game' class="exit-button"><button style='margin-right:25px;'><h4>Exit</h4></button></a>
+        <button style='background-color:transparent;'><p style='color:yellow;'>Welcome {{ request.args.get('gametag') }}</p></button>
+        <button style='margin-left:25px;' class="trophy-btn" onclick="showPopup()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="yellow" class="bi bi-trophy-fill" viewBox="0 0 16 16">
+            <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935"/>
+          </svg>
+        </button>
+    </div>
+    <!-- The leaderboard popup -->
+  <div id="leaderboardPopup" class="popup">
+    <div class="popup-content">
+        <!-- Close button for the popup -->
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h2>Leaderboard</h2>
+        <!-- Placeholder for the leaderboard content -->
+        <div id="leaderboardContent"></div>
+    </div>
+</div>
+
+<script>
+    // Function to fetch the top 10 scorers
+    async function fetchTopScorers() {
+      try {
+          const response = await fetch('https://_YOUR_.firebasedatabase.app/_NAME_.json');
+          const data = await response.json();
+          console.log('Data from Firebase:', data); // Add this line for debugging
+  
+          // Array to store scores for all gamertags
+          const ostrichs = [];
+  
+          // Iterate over each gamertag
+          for (const gamertag in data) {
+              const gamertagData = data[gamertag];
+              // Check if the gamertag has a score property
+              if (gamertagData.ostrich) {
+                  // Round the score to 4 decimal places
+                  const roundedScore = parseFloat(gamertagData.ostrich);
+                  // Push gamertag and rounded score to the drives array
+                  ostrichs.push({ gamertag, ostrich: roundedScore });
+              }
+          }
+  
+          // Sort scores in descending order
+          ostrichs.sort((a, b) => b.ostrich - a.ostrich);
+          console.log('Top 10 ostriches:', ostrichs); // Add this line for debugging
+  
+          // Display top 10 scorers
+          const leaderboardContent = document.getElementById('leaderboardContent');
+          leaderboardContent.innerHTML = '<ol>';
+          for (let i = 0; i < Math.min(ostrichs.length, 10); i++) {
+              const place = i + 1;
+              let svg = '';
+              if (place === 1) {
+                  svg = '<svg style="color: rgb(0, 255, 225);" xmlns="http://www.w3.org/2000/svg"  width="20px" height="20px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="#00ffe1"></path></svg>';
+              } else if (place === 2) {
+                  svg = '<svg style="color: red;" xmlns="http://www.w3.org/2000/svg"  width="20px" height="20px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="red"></path></svg>';
+              } else if (place === 3) {
+                  svg = '<svg style="color: white;" xmlns="http://www.w3.org/2000/svg"  width="20px" height="20px" viewBox="0 0 576 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z" fill="white"></path></svg>';
+              }
+              leaderboardContent.innerHTML += `<li>${svg} ${ostrichs[i].gamertag}: ${ostrichs[i].ostrich}</li>`;
+          }
+          leaderboardContent.innerHTML += '</ol>';
+  
+      } catch (error) {
+          console.error('Error fetching top scorers:', error);
+      }
+  }
+    
+
+    // Function to show the popup
+    function showPopup() {
+        var popup = document.getElementById("leaderboardPopup");
+        popup.style.display = "block";
+
+        // Fetch top scorers when showing the popup
+        fetchTopScorers();
+    }
+
+    // Function to close the popup
+    function closePopup() {
+        var popup = document.getElementById("leaderboardPopup");
+        popup.style.display = "none";
+    }
+  </script>
+</div>
+    <canvas id="canvas"></canvas>
+    <script src="static/game1.js"></script>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            resizeCanvas(canvas);
+            window.addEventListener('resize', function() {
+              resizeCanvas(canvas);
+            });
+          };
+          
+          function resizeCanvas(canvas) {
+            var ratio = 276 / 414; // Aspect ratio of canvas
+            var maxWidth = window.innerWidth; // Max width of the window
+            var maxHeight = window.innerHeight; // Max height of the window
+          
+            var canvasWidth = maxWidth; // Initially set canvas width to max width
+            var canvasHeight = maxWidth / ratio; // Calculate canvas height based on aspect ratio
+          
+            // If the calculated canvas height is greater than the max height, adjust the canvas dimensions
+            if (canvasHeight > maxHeight) {
+              canvasHeight = maxHeight; // Set canvas height to max height
+              canvasWidth = maxHeight * ratio; // Adjust canvas width based on aspect ratio
+            }
+          
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+          }
+    </script>
+</body>
+</html>

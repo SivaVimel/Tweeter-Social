@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tweeter</title>
+    <style>
+        body {
+            background-color: #242424;
+            color: #98fb98;
+            margin: 0; /* Remove default body margin */
+            padding: 0; /* Remove default body padding */
+        }
+        button {
+            background-color: transparent;
+        }
+        .container {
+            width: 100%;
+            height: 100vh; /* Set height to 100% of viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Align items evenly along the cross-axis */
+            background: radial-gradient(
+                  circle farthest-side at 0% 50%,
+                  #282828 23.5%,
+                  rgba(255, 170, 0, 0) 0
+                )
+                21px 30px,
+              radial-gradient(
+                  circle farthest-side at 0% 50%,
+                  #2c3539 24%,
+                  rgba(240, 166, 17, 0) 0
+                )
+                19px 30px,
+              linear-gradient(
+                  #282828 14%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 85%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(
+                  150deg,
+                  #282828 24%,
+                  #2c3539 0,
+                  #2c3539 26%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 74%,
+                  #2c3539 0,
+                  #2c3539 76%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(
+                  30deg,
+                  #282828 24%,
+                  #2c3539 0,
+                  #2c3539 26%,
+                  rgba(240, 166, 17, 0) 0,
+                  rgba(240, 166, 17, 0) 74%,
+                  #2c3539 0,
+                  #2c3539 76%,
+                  #282828 0
+                )
+                0 0,
+              linear-gradient(90deg, #2c3539 2%, #282828 0, #282828 98%, #2c3539 0%) 0 0
+                #282828;
+            background-size: 40px 60px;
+            padding-bottom: 50px; /* Space for the form */
+        }
+
+        #chat-box {
+            overflow-y: scroll;
+            padding: 10px;
+            flex-grow: 1; /* Take up remaining space */
+        }
+
+        input[type="text"] {
+            width: 80%;
+        }
+        #chat-box::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        .Messenger {
+            width: 90%;
+            background-color: transparent;
+            
+        }
+        .navigation-card {
+            display: flex;
+            gap: 10%; /* Adjust the gap between elements */
+            border-radius: 50px;
+        }
+        
+        .tab {
+            margin-left: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }   
+        .tab1 {
+            margin-right: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }      
+        a {
+            text-decoration: none;
+        }
+        .button1 {
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+          }
+          
+          .button1 .svg-icon {
+            animation: spin 2s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+          
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        .header {
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    
+        .modal-content {
+            background-color: black;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+        }
+    
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    
+        .close:hover,
+        .close:focus {
+            color: #80FE0C;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .FuckYeah {
+            display:flex;
+            margin-top:5%;
+            justify-content:space-around;
+        }
+        .FuckYeah button{
+            border-radius: 5px;
+            font-size:100%;
+
+            background-color: transparent;
+            font-size: 90%;
+            color:#80FE0C;
+            
+        }
+        audio {
+            width: 0%; /* Ensure the audio player spans the full width */
+            height: 1px; /* Set a fixed height for the player */
+            background-color: transparent; /* Set background color */
+            border: none; /* Remove any borders */
+            outline: none; /* Remove outline */
+        }
+    </style>
+    <script>
+            // Define the game object with the audio function
+            var game = {};
+        
+            // Define the audio function
+            game.audio = function () {
+                // Create an AudioContext
+                var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+                // Create a gain node to control the volume
+                var volume = audioContext.createGain();  
+                volume.gain.value = 0.15; // Set the volume level (adjust as needed)
+                volume.connect(audioContext.destination);  
+            
+                // Create an oscillator node
+                var oscillator = audioContext.createOscillator();
+                oscillator.frequency.value = 500; // Set the frequency to produce a bell-like sound
+                oscillator.type = 'sine'; // Use a sine wave oscillator for a bell-like sound
+            
+                // Connect the oscillator to the volume node
+                oscillator.connect(volume);
+            
+                // Start the oscillator
+                oscillator.start();
+            
+                // Store the oscillator reference for later use
+                game.audio.oscillator = oscillator;
+            
+                // Stop the oscillator after 2 seconds
+                setTimeout(function() {
+                    oscillator.stop();
+                }, 100); // Adjust the duration as needed
+            };
+    </script>
+</head>
+<body>        
+    <div class="container">
+        <div id='loadField' style='display: none; text-align:center;'>
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/xmuplryc.json"
+                trigger="loop"
+                state="loop-wifi"
+                colors="primary:aqua"
+                style="width:25px;height:25px">
+            </lord-icon>
+        </div>
+        <script>
+            function displayLoad() {
+                var text = document.getElementById('loadField')
+                text.style.display = 'block';
+            }
+            </script>
+        <div class="header">
+            <a href="#" class="tab1" onclick="showPopup()">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/nqtddedc.json"
+                    trigger="loop"
+                    colors="primary:#80FE0C"
+                    style="width:25px;height:25px">
+                </lord-icon>
+            </a>
+            <script>
+                function showPopup() {
+                    // Get the modal
+                    var modal = document.getElementById("myModal");
+            
+                    // Display the modal
+                    modal.style.display = "block";
+            
+                    // When the user clicks on <span> (x), close the modal
+                    var span = document.getElementsByClassName("close")[0];
+                    span.onclick = function () {
+                        modal.style.display = "none";
+                    };
+            
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    };
+                }
+            </script>
+            
+            <!-- HTML for the pop-up modal -->
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Group-Instructions: <strong style='color:#80FE0C; font-size:60%;'>Private Chat</strong></h3>
+                    <p><strong style='color:#80FE0C;'>System</strong>: Indicates new joiners!</p>
+                    <p>[I] This chat will disappear if the server gets refreshed/restarted.</p>
+                    <p>[II] /NAME keyword won't work here.</p>
+                    <p>[III] May the code be with you.</p>
+                    <p><strong style='color:#80FE0C;'>Header</strong>:</p>
+                    <img style='width:100%;' src='\static\grouphead.jpg'>
+                    <p><strong>Notify</strong> - To send notification.</p>
+                    <p><strong>Refresh</strong> - This button would help you in refresh [access new messages]</p>
+                    <p><strong>Receive</strong> - The "Receive" button, when clicked, opens a clone of the current page to continuously receive new messages or notifications, primarily serving as a notification tool for users.</p>
+                    <p><strong>Home</strong> - Redirect to the home page.</p>
+                    <p><strong style='color:#80FE0C;'>Send / Receive Notification</strong>:</p>
+                    <img style='width:100%;' src='\static\notifyhelp.gif'>
+                    <p>The "Notify" button sends out a signal, beckoning others to join the conversation with a friendly sound. Meanwhile, the "Receive" button creates a duplicate portal, allowing users to stay connected even while away. Together, they form a magical bond: users activate "Receive" to roam freely while remaining alert, and "Notify" brings them back with its enchanting sound, ensuring seamless communication in the digital realm.</p>
+                    <p><script src="https://cdn.lordicon.com/lordicon.js"></script><lord-icon src="https://cdn.lordicon.com/wpyrrmcq.json" trigger="click" colors="primary:#80FE0C" style="width:20px;height:20px"></lord-icon><strong style='color:#80FE0C;'>or /clearall</strong> - To erase all messages.</p>
+                    <p><strong style='color:#80FE0C;'>/p</strong> -  Use this command to share an image in the chat. For example, if you type "/p img_url", it will display the image from the provided URL in the chatbox.</p>
+                    <img style='width:100%;' src='\static\p.gif'>
+                    <p><strong style='color:#80FE0C;'>/v</strong> - Utilize this command to share YouTube videos in the chat. For instance, if you input "/v youtube_url", it will embed the video into the chat, allowing everyone to view and enjoy it.</p>
+                    <p><strong style='color:#80FE0C;'>Joiners</strong>:</p>
+                    <img style='width:100%;' src='\static\pc1.jpg'>
+                    <p>This is a system message indicating that a new user has joined the conversation.</p>
+                    <p style='color:aqua;font-style: italic; text-align:center;'>Powered by Scriptiez</p>
+                </div>
+            </div>
+            <form action="/send_notification/private/{{ group_name }}" method="post">
+                <button id="notifyButton" style='margin-right: 25px; border-radius: 5px; border-color: #80FE0C; background-color: transparent;font-size: 90%;color:#80FE0C;' type="submit">Notify</button>
+                <input type="hidden" name="notify" value="true">
+            </form>
+            <a href="#" onclick="refreshPage()">
+                <img src="\static\l2.png" style="display: block; margin: 0 auto; width: 50px; height: auto; text-align: center;">
+            </a>
+            <button style='margin-left: 25px;border-radius: 5px; border-color: #80FE0C; background-color: transparent;font-size: 90%;color:#80FE0C;' id="autopilotButton">Receive</button>
+            <a onclick='displayLoad()' href="/" class="tab">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/cnpvyndp.json"
+                    trigger="loop"
+                    colors="primary:#80FE0C"
+                    style="width:25px;height:25px">
+                </lord-icon>
+            </a>
+        </div>       
+        
+        <div class='FuckYeah'>
+            <form id="clearMessagesForm1" action="/send_disturb/private/{{ group_name }}" method="post">
+                   <button style='border:none;' id="clearmessages1">
+                    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                    <lord-icon
+                        src="https://cdn.lordicon.com/wpyrrmcq.json"
+                        trigger="click"
+                        colors="primary:#80FE0C"
+                        style="width:20px;height:20px">
+                    </lord-icon>
+                   </button>
+                   <input type="hidden" name="clearall" value="true">
+               </form>
+
+            <form class="Messenger" action="/send_message/private/{{ group_name }}" method="post">
+                <input style="border-radius: 5px; background-color: #222222; color: #80FE0C;" type="text" name="message" placeholder="What is up?">
+                <button style="border-radius: 5px; background-color: transparent; color: #80FE0C;" type="submit">Send</button>
+            </form>
+        </div>
+        <form id="clearMessagesForm" action="/send_disturb/private/{{ group_name }}" method="post">
+            <button id="clearmessages" style='border-radius: 5px; background-color: transparent; color: #80FE0C;'>ClearAll</button>
+            <input type="hidden" name="clearall" value="true">
+        </form>
+        <script>
+            document.getElementById('clearmessages').style.display = 'block'; // Show the button
+            document.getElementById('clearmessages').style.display = 'none'; // Hide the button
+            document.getElementById('clearmessages').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default behavior
+                clearMessages(); // Call function to clear messages
+            });
+            
+            function clearMessages() {
+                // Fetch the group name from the URL
+                var group_name = window.location.pathname.split('/').pop();
+            
+                // Make a fetch request to clear messages
+                fetch('/send_disturb/private/' + group_name, {
+                    method: 'POST',
+                    body: new FormData(document.getElementById('clearMessagesForm')),
+                })
+                .then(response => {
+                    // Handle response here if needed
+                    console.log('Messages cleared successfully');
+                    // You can update the chat box or perform any other actions here
+                })
+                .catch(error => console.error('Error clearing messages:', error));
+            }
+           </script>
+               <div id="chat-box">
+            {% for sender, message, timestamp in group_messages[::-1] %}
+                <!-- Reverse the order of messages -->
+                {% if message.startswith('<img') %}
+                    <!-- Check if the message is an image -->
+                    <p><strong style='color:#80FE0C;'>{{ sender }}</strong> {{ message | safe }} <br> <small style='color: #00ff00;'>{{ timestamp }}</small></p>
+                {% elif message.startswith('<iframe') %}
+                    <!-- Display the embedded video -->
+                    <p><strong style='color:#80FE0C;'>{{ sender }}</strong><br>{{ message|safe }} <br> <small style='color: aqua'>{{ timestamp }}</small></p>
+                {% elif message.startswith('<button class="Audio">') %}
+                     <!-- Display the button message -->
+                     <p><strong style='color:#80FE0C;'>{{ sender }}</strong><br>{{ message|safe }} <br> <small style='color: orange'>{{ timestamp }}</small></p>
+                {% else %}
+                    <!-- Regular text message -->
+                    <p><strong style='color:#80FE0C;'>{{ sender }}</strong> {{ message }} <br> <small style='color: #00ff00;'>{{ timestamp }}</small></p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function refreshPage() {
+            var text = document.getElementById('loadField')
+            text.style.display = 'block';
+            window.location.reload();
+        }
+    </script>
+    <script>
+        var autopilotEnabled = false;
+        var isAudioPlaying = false;
+
+    // Function to toggle autopilot mode
+    function toggleAutopilot() {
+        autopilotEnabled = !autopilotEnabled; // Toggle autopilot state
+        var autopilotButton = document.getElementById('autopilotButton');
+        if (autopilotEnabled) {
+            autopilotButton.innerText = 'Do Not Disturb'; // Change button text
+            refreshChatBox(); // Call refreshChatBox when autopilot is turned on
+            // Refresh the chat box every 2 seconds when autopilot is turned on
+            autopilotInterval = setInterval(refreshChatBox, 2000);
+            console.log('Autopilot turned on');
+        } else {
+            autopilotButton.innerText = 'Receive'; // Change button text
+            clearInterval(autopilotInterval); // Stop refreshing the chat box when autopilot is turned off
+            document.getElementById('clearmessages1').click();
+            console.log('Autopilot turned off');
+        }
+    }
+
+    // Add event listener to the Autopilot button
+    document.getElementById('autopilotButton').addEventListener('click', toggleAutopilot);
+
+function refreshChatBox() {
+    // Fetch the group name from the URL
+    var group_name = window.location.pathname.split('/').pop();
+
+    // Make a fetch request to the server to get new messages
+    fetch('/private/' + group_name)
+        .then(response => response.text())
+        .then(htmlContent => {
+            var chatBox = document.getElementById("chat-box");
+            var previousHTML = chatBox.innerHTML;
+            chatBox.innerHTML = htmlContent;
+            console.log('Chat box refreshed');
+
+            var audioButton = document.querySelector('.Audio');
+            if (audioButton) {
+                simulateClick(audioButton);
+            }
+        })
+        .catch(error => console.error('Error fetching new messages:', error));
+
+    function simulateClick(element) {
+        var event = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        });
+        element.dispatchEvent(event);
+    }
+
+    document.addEventListener('click', function(event) {
+        if (!isAudioPlaying && event.target.classList.contains('Audio')) {
+            isAudioPlaying = true; // Set flag to indicate audio is playing
+            game.audio();
+            console.log('Button clicked and audio played');
+            
+            // Reset the flag after 2 seconds (adjust if needed based on audio duration)
+            setTimeout(function() {
+                isAudioPlaying = false;
+            }, 2000);
+        }
+    });
+}
+
+        document.getElementById('autopilotButton').addEventListener('click', function(event) {
+               event.preventDefault(); // Prevent default behavior
+               // Trigger a click event on the clear messages button
+               document.getElementById('clearmessages').click();
+               console.log('Clear messages button clicked');
+        });
+    </script>
+</body>
+</html>

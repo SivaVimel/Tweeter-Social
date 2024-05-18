@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Donation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: aqua;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            font-family: inherit;
+            gap: 10px;
+            padding-inline: 2em;
+            padding-bottom: 0.4em;
+            background-color: #171717;
+            //background-color: #0a192f;
+            border-radius: 20px;
+            margin-bottom: 15px;
+          }
+          
+          .form-heading {
+            text-align: center;
+            margin: 2em;
+            color: #64ffda;
+            font-size: 1.2em;
+            background-color: transparent;
+            align-self: center;
+          }
+          
+          .form-field {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+            border-radius: 10px;
+            padding: 0.6em;
+            border: none;
+            outline: none;
+            color: white;
+            background-color: #171717;
+            box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+          }
+          
+          .input-field {
+            background: none;
+            border: none;
+            outline: none;
+            width: 100%;
+            color: #ccd6f6;
+            padding-inline: 1em;
+          }
+          
+          .sendMessage-btn {
+            cursor: pointer;
+            margin-bottom: 3em;
+            padding: 1em;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: #64ffda;
+            font-weight: bold;
+            outline: 1px solid #64ffda;
+            transition: all ease-in-out 0.3s;
+          }
+          
+          .sendMessage-btn:hover {
+            transition: all ease-in-out 0.3s;
+            background-color: #64ffda;
+            color: #000;
+            cursor: pointer;
+            box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+          }
+          
+          .form-card1 {
+            background-image: linear-gradient(163deg, #64ffda 0%, #64ffda 100%);
+            border-radius: 22px;
+            transition: all 0.3s;
+          }
+          
+          .form-card1:hover {
+            box-shadow: 0px 0px 30px 1px rgba(100, 255, 218, 0.3);
+          }
+          
+          .form-card2 {
+            border-radius: 0;
+            transition: all 0.2s;
+          }
+          
+          .form-card2:hover {
+            transform: scale(0.98);
+            border-radius: 20px;
+          }          
+        
+        .tab {
+            margin-left: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }   
+        .tab1 {
+            margin-right: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }      
+        a {
+            text-decoration: none;
+        }
+        .button1 {
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+          }
+          
+          .button1 .svg-icon {
+            animation: spin 2s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+          
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        .header {
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0, 0, 0, 0.4);
+      }
+  
+      .modal-content {
+          background-color: black;
+          margin: 15% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          border-radius: 10px;
+          width: 80%;
+          max-width: 400px;
+      }
+  
+      .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+      }
+  
+      .close:hover,
+      .close:focus {
+          color: #80FE0C;
+          text-decoration: none;
+          cursor: pointer;
+      }
+    </style>
+</head>
+<body>
+  <div id='loadField' style='display: none; text-align:center;'>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <lord-icon
+        src="https://cdn.lordicon.com/xmuplryc.json"
+        trigger="loop"
+        state="loop-wifi"
+        colors="primary:aqua"
+        style="width:25px;height:25px">
+    </lord-icon>
+</div>
+<script>
+    function displayLoad() {
+        var text = document.getElementById('loadField')
+        text.style.display = 'block';
+    }
+    </script>
+    <div class="header">
+        <a href="#" class="tab1" onclick="showPopup()">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/nqtddedc.json"
+                trigger="loop"
+                colors="primary:aqua"
+                style="width:25px;height:25px">
+            </lord-icon>
+        </a>
+        <script>
+            function showPopup() {
+                // Get the modal
+                var modal = document.getElementById("myModal");
+        
+                // Display the modal
+                modal.style.display = "block";
+        
+                // When the user clicks on <span> (x), close the modal
+                var span = document.getElementsByClassName("close")[0];
+                span.onclick = function () {
+                    modal.style.display = "none";
+                };
+        
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                };
+            }
+        </script>
+        
+        <!-- HTML for the pop-up modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Help-Log: <strong style='color:red; font-size:60%;'>Donation</strong></h3>
+                <p>Your contribution supports ongoing app development, ensuring new features and enhancements for an improved user experience.</p>
+                <p>1. <strong>Step 1</strong>:</p>
+                <img style='width:100%;' src='static\buy.jpg'>
+                <p>2. <strong>Step 2</strong>:</p>
+                <img style='width:100%;' src='static\buy1.jpg'>
+                <p>3. <strong>Step 3</strong>:</p>
+                <img style='width:100%;' src='static\buy3.jpg'>
+                <p style='text-align:center;'>Thank you for helping us grow!</p>
+                <p style='color:aqua;font-style: italic; text-align:center;'>Powered by Scriptiez</p>
+            </div>
+        </div>
+        <a onclick='displayLoad()' href="/">
+            <img src="static\l2.png" style="display: block; margin: 0 auto; width: 50px; height: auto; text-align: center;">
+        </a>
+        <a onclick='displayLoad()' href='/clan' class="tab">
+          <script src="https://cdn.lordicon.com/lordicon.js"></script>
+          <lord-icon
+              src="https://cdn.lordicon.com/rpgflpkp.json"
+              trigger="loop"
+              colors="primary:aqua"
+              style="width:25px;height:25px">
+          </lord-icon>
+        </a>
+    </div>   
+
+    <div class="form-card1">
+        <div class="form-card2">
+          <form class="form" action='https://www.buymeacoffee.com/scriptiez'>
+            <p class="form-heading">Donation</p>
+      
+            <p style='color: white;'>Support Our Platform! <br><br>If you enjoy using our platform and find it valuable, consider showing your support by making a donation. Your contribution helps us maintain and improve our services, ensuring that we can continue providing you with a great experience.<br> <br><strong style='color:aqua;'>Every donation, no matter how small, makes a difference and is greatly appreciated. Thank you for supporting us!</strong></p>
+            <button onclick='displayLoad()' type="submit" class="sendMessage-btn">Buy</button>
+          </form>
+        </div>
+    </div>
+
+    <div class="form-card1">
+      <div class="form-card2">
+        <form class="form" action= 'https://www.buymeacoffee.com/scriptiez/e/238913'>
+          <p class="form-heading">Permanent Clan</p>
+    
+          <p style='color: white;'>Are you ready to create your own exclusive permanent clan in our community? <br><br>Follow these simple steps to customize your clan and gain access to a private chat-room. <br><br>Submission Format: <br>To submit your clan purchase details, please provide the following information in the specified format in the "Name" or "@yoursocial" box:<br><br><strong style='color:aqua'>Mail:</strong> (To assist you with Leader Member Passwords) <br><strong style='color:aqua'>Clan Name:</strong> (Provide a unique name for your clan, consisting of no more than 2 words) <br><strong style='color:aqua'>Clan Bio:</strong> (Provide a summary about your clan, in one sentence) <br><strong style='color:aqua'>Clan Color:</strong> (Specify the color code you'd like to use for your clan) <br><br>Upon completion of the purchase process, you will receive your clan leader password within 24 hours.<br><br> <strong style='color:aqua'>As the clan leader, you have the responsibility to manage your clan's security and access. Create your unique clan today and start building your private community within our platform!</strong></p>
+          <button onclick='displayLoad()' type="submit" class="sendMessage-btn">Buy</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="form-card1">
+      <div class="form-card2">
+        <form class="form" action='https://www.buymeacoffee.com/scriptiez'>
+          <p class="form-heading">Clan Update</p>
+    
+          <p style='color: white;'>As the clan leader, you have the responsibility to manage your clan. If you want to update your clan name, color or bio - follow these steps: <br><br>~ Make a minimum payment of $5. <br>~ When making the payment, please include your clan name and the leader password for verification purposes, along with the request of change you want to make. [In Name or @yoursocial box]<br>~ Once the payment is confirmed, our team will process your request within 24 hours.<br><br>
+              <strong style='color:aqua;'>If you have any questions or need further assistance, feel free to contact us.</strong></p>
+          <button onclick='displayLoad()' type="submit" class="sendMessage-btn">Buy</button>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="form-card1">
+        <div class="form-card2">
+          <form class="form" action={{ mail }} method="post" enctype="text/plain">
+            <p class="form-heading">Suggestion/Query</p>
+      
+            <div class="form-field">
+              <input required placeholder="Name" class="input-field" type="text" name="name" />
+            </div>
+      
+            <div class="form-field">
+              <input required placeholder="Email" class="input-field" type="email" name="email" />
+            </div>
+      
+            <div class="form-field">
+              <input required placeholder="Subject" class="input-field" type="text" name="subject" />
+            </div>
+      
+            <div class="form-field">
+              <textarea required placeholder="Message" cols="30" rows="3" class="input-field" name="message"></textarea>
+            </div>
+      
+            <button type="submit" class="sendMessage-btn">Send Message</button>
+          </form>
+        </div>
+      </div>
+</body>
+</html>

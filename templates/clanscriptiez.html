@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Clan</title>
+    <style>
+        body {
+            background-color: black;
+            color: #FF2226;
+        }
+          
+        #form {
+            display: grid;
+            place-items: center;
+            width: 300px;
+            height: 472px;
+            padding: 25px;
+            background-color: #161616;
+            box-shadow: 0px 15px 60px #FF2226;
+            outline: 1px solid red;
+            border-radius: 10px;
+          }
+          
+          #form-body {
+            top: 50%;
+            right: 25px;
+            left: 25px;
+            width: 230px;
+            margin: -156px auto 0 auto;
+          }
+          
+          #welcome-lines {
+            margin-top:50%;
+            text-align: center;
+            line-height: 1;
+          }
+          
+          #welcome-line-1 {
+            color: #FF2226;
+            font-weight: 600;
+            font-size: 40px;
+          }
+          
+          #welcome-line-2 {
+            color: #ffffff;
+            font-size: 18px;
+            margin-top: 17px;
+          }
+          
+          #input-area {
+            margin-top: 40px;
+          }
+          
+          .form-inp {
+            padding: 11px 25px;
+            background: transparent;
+            border: 1px solid #e3e3e3;
+            line-height: 1;
+            border-radius: 8px;
+          }
+          
+          .form-inp:focus {
+            border: 1px solid #FF2226;
+          }
+          
+          .form-inp:first-child {
+            margin-bottom: 15px;
+          }
+          
+          .form-inp input {
+            width: 100%;
+            background: none;
+            font-size: 13.4px;
+            color: #FF2226;
+            border: none;
+            padding: 0;
+            margin: 0;
+          }
+          
+          .form-inp input:focus {
+            outline: none;
+          }
+          
+          #submit-button-cvr {
+            margin-top: 20px;
+          }
+          
+          #submit-button {
+            display: block;
+            width: 100%;
+            color: #FF2226;
+            background-color: transparent;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0;
+            padding: 14px 13px 12px 13px;
+            border: 0;
+            outline: 1px solid #FF2226;
+            border-radius: 8px;
+            line-height: 1;
+            cursor: pointer;
+            transition: all ease-in-out .3s;
+          }
+          
+          #submit-button:hover {
+            transition: all ease-in-out .3s;
+            background-color: #FF2226;
+            color: #161616;
+            cursor: pointer;
+          }
+          
+          #forgot-pass {
+            text-align: center;
+            margin-top: 10px;
+          }
+          
+          #forgot-pass a {
+            color: #868686;
+            font-size: 12px;
+            text-decoration: none;
+          }
+          
+          #bar {
+            position: absolute;
+            left: 50%;
+            bottom: -50px;
+            width: 28px;
+            height: 8px;
+            margin-left: -33px;
+            background-color: red;
+            border-radius: 10px;
+          }
+          
+          #bar:before,
+          #bar:after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #ececec;
+            border-radius: 50%;
+          }
+          
+          #bar:before {
+            right: -20px;
+          }
+          
+          #bar:after {
+            right: -38px;
+          }
+          
+        .tab {
+            margin-left: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }   
+        .tab1 {
+            margin-right: auto;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }      
+        a {
+            text-decoration: none;
+        }
+        .button1 {
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+          }
+          
+          .button1 .svg-icon {
+            animation: spin 2s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+          
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        .header {
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0, 0, 0, 0.4);
+      }
+  
+      .modal-content {
+          background-color: black;
+          margin: 15% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          border-radius: 10px;
+          width: 80%;
+          max-width: 400px;
+      }
+  
+      .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+      }
+  
+      .close:hover,
+      .close:focus {
+          color: #80FE0C;
+          text-decoration: none;
+          cursor: pointer;
+      }
+    </style>
+</head>
+<body>
+  <div id='loadField' style='display: none; text-align:center;'>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <lord-icon
+        src="https://cdn.lordicon.com/xmuplryc.json"
+        trigger="loop"
+        state="loop-wifi"
+        colors="primary:aqua"
+        style="width:25px;height:25px">
+    </lord-icon>
+</div>
+<script>
+    function displayLoad() {
+        var text = document.getElementById('loadField')
+        text.style.display = 'block';
+    }
+    </script>
+    <div class="header">
+        <a href="#" class="tab1" onclick="showPopup()">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/nqtddedc.json"
+                trigger="loop"
+                colors="primary:#FF2226"
+                style="width:25px;height:25px">
+            </lord-icon>
+        </a>
+        <script>
+            function showPopup() {
+                // Get the modal
+                var modal = document.getElementById("myModal");
+        
+                // Display the modal
+                modal.style.display = "block";
+        
+                // When the user clicks on <span> (x), close the modal
+                var span = document.getElementsByClassName("close")[0];
+                span.onclick = function () {
+                    modal.style.display = "none";
+                };
+        
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                };
+            }
+        </script>
+        
+        <!-- HTML for the pop-up modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3 style='color:#80FCFC;'>Help-Log: <strong style='color:red; font-size:60%;'>Permanent Clan</strong></h3>
+                <p style='color:#80FCFC;'><strong style='color:aqua;'>Join</strong>:</p>
+                <img style='width:100%;' src='static\clanlogin.jpg'>
+                <p style='color:#80FCFC;'>Permanent clans provide lasting community spaces for ongoing engagement and connections. Purchase them from the donation page to customize and maintain your group indefinitely.</p>
+                <p style='color:aqua;font-style: italic; text-align:center;'>Powered by Scriptiez</p>
+            </div>
+        </div>
+        <a onclick='displayLoad()' href="/">
+            <img src="static\l2.png" style="display: block; margin: 0 auto; width: 50px; height: auto; text-align: center;">
+        </a>
+        <a onclick='displayLoad()' href='/clan' class="tab">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/rpgflpkp.json"
+                trigger="loop"
+                colors="primary:#FF2226"
+                style="width:25px;height:25px">
+            </lord-icon>
+        </a>
+    </div>   
+    
+  <div id="form-ui" style="justify-content:center; display: flex; align-items: center;">
+    <form action="/scriptiez" method="post" id="form">
+      <div id="form-body">
+        <div id="welcome-lines">
+          <div id="welcome-line-1">Forever</div>
+          <div id="welcome-line-2">Welcome to the <br> Official Clan! <br> <small style='font-size:50%; color: rgb(255, 141, 141);'>Where you can make suggestions or reports.</small></div>
+        </div>
+        <div id="input-area">
+          <div class="form-inp">
+            <input name="password" placeholder="Leader Password" type="password">
+          </div>
+        </div>
+        <div id="submit-button-cvr">
+          <button onclick='displayLoad()' id="submit-button" type="submit">Join</button>
+        </div>
+      </div>
+    </form>
+    </div>
+</body>
+</html>
