@@ -1,4 +1,4 @@
-# @Tweeter
+# @Tweeter 𓅦
 
 Welcome to @Tweeter – the social platform that puts the power back in your hands. Tired of being a product for big tech companies? Say no more. With @Tweeter, your data is yours and yours alone.
 
@@ -45,5 +45,5 @@ To use the @Tweeter app, follow these steps:
 3. Add or alter custom names for name commands in `app.py`.
 4. Install the `requirements.txt`.
 
-# In Conclusion
+# In Conclusion 𓅦
 @Tweeter is more than just a social platform – it's a movement towards reclaiming your online presence and embracing freedom of expression. I created @Tweeter with the vision of providing a space where you can have private conversations with your friends, and enable them to do the same with their loved ones, without the fear of being spied on by AI or multimillion-dollar companies. We believe in safeguarding your privacy and ensuring that your conversations remain just that – yours. No more selling your data in the name of advertising for monetization. Join us today and experience a world where your data is respected, your privacy is paramount, and your voice truly matters. Together, let's shape a future where social media is about connection, creativity, and community. Download @Tweeter now and be part of the revolution.
